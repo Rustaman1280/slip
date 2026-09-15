@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Slip Gaji Karyawan - UKK Penggajian (Demo)</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a !important;
+            font-size: 1.1rem;
+        }
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .table > :not(caption) > * > * {
+            padding: 0.85rem 0.75rem;
+        }
+        .table-hover > tbody > tr:hover {
+            background-color: #f1f5f9;
+        }
+        .btn-dark-custom {
+            background-color: #0f172a;
+            border-color: #0f172a;
+            color: #ffffff;
+        }
+        .btn-dark-custom:hover {
+            background-color: #334155;
+            border-color: #334155;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar (Navbar) -->
+<nav class="navbar navbar-expand-lg navbar-custom py-2 mb-4 sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="riwayat.html">
+            <i class="bi bi-wallet2 text-dark fs-5"></i>
+            <span>UKK PENGGAJIAN</span>
+        </a>
+
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <span class="small text-secondary d-none d-sm-inline">
+                <i class="bi bi-person-circle me-1"></i> Administrator (Demo)
+            </span>
+            <a href="login.html" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Keluar</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Konten Utama -->
+<main class="container mb-5">
+    <!-- Header Halaman Riwayat & Tombol Tambah Slip Gaji -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h5 class="fw-bold text-dark mb-1">Riwayat Slip Gaji Karyawan</h5>
+            <p class="text-muted small mb-0">Daftar arsip slip gaji karyawan yang telah dibuat dan dihitung.</p>
+        </div>
+        <div>
+            <!-- Tombol Tambah Slip Gaji -->
+            <a href="tambah.html" class="btn btn-dark-custom d-inline-flex align-items-center gap-2">
+                <i class="bi bi-plus-lg fs-6"></i>
+                <span>Tambah Slip Gaji</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 Kartu Ringkasan (Stats Cards) Minimalis -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small d-block mb-1">Total Dokumen Slip</span>
+                        <h5 class="fw-bold text-dark mb-0" id="statTotalSlip">0 Dokumen</h5>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="bi bi-file-earmark-text fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small d-block mb-1">Total Pengeluaran Gaji</span>
+                        <h5 class="fw-bold text-dark mb-0" id="statTotalPengeluaran">Rp 0</h5>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="bi bi-cash fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small d-block mb-1">Rata-rata Gaji Bersih</span>
+                        <h5 class="fw-bold text-dark mb-0" id="statRataRataGaji">Rp 0</h5>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="bi bi-wallet2 fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabel Riwayat Slip Gaji -->
+    <div class="card">
+        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <span class="fw-semibold text-dark small">Daftar Arsip Slip Gaji</span>
+            <!-- Input Pencarian Sederhana -->
+            <div class="input-group input-group-sm" style="max-width: 240px;">
+                <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control border-start-0" id="searchTable" placeholder="Cari nama atau NIK...">
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tableSlipGaji">
+                    <thead class="table-light border-bottom">
+                        <tr class="small text-secondary fw-semibold">
+                            <th class="text-center" style="width: 45px;">No</th>
+                            <th>No. Slip</th>
+                            <th>Periode Gaji</th>
+                            <th>Karyawan</th>
+                            <th>Jabatan</th>
+                            <th class="text-end">Penghasilan</th>
+                            <th class="text-end">Potongan</th>
+                            <th class="text-end">Gaji Bersih</th>
+                            <th class="text-center" style="width: 100px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodySlipGaji">
+                        <!-- Diisi secara dinamis oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Data Dummy Awal
+    const defaultData = [
+        {
+            id: 1,
+            no_slip: "SLIP-202609-001",
+            periode: "25 November 2025 - 25 Desember 2025",
+            tanggal: "2025-12-25",
+            nama_karyawan: "Budi Santoso",
+            nik: "320101234567",
+            jabatan: "Web Developer",
+            no_telepon: "081234567890",
+            gaji_pokok: 5000000,
+            lembur: 1000000,
+            total_penghasilan: 6000000,
+            pinjaman: 500000,
+            total_potongan: 500000,
+            gaji_bersih: 5500000
+        },
+        {
+            id: 2,
+            no_slip: "SLIP-202609-002",
+            periode: "25 November 2025 - 25 Desember 2025",
+            tanggal: "2025-12-25",
+            nama_karyawan: "Siti Aminah",
+            nik: "320109876543",
+            jabatan: "UI/UX Designer",
+            no_telepon: "085712345678",
+            gaji_pokok: 4800000,
+            lembur: 500000,
+            total_penghasilan: 5300000,
+            pinjaman: 200000,
+            total_potongan: 200000,
+            gaji_bersih: 5100000
+        },
+        {
+            id: 3,
+            no_slip: "SLIP-202609-003",
+            periode: "01 Februari 2026 - 28 Februari 2026",
+            tanggal: "2026-02-28",
+            nama_karyawan: "Ahmad Fauzi",
+            nik: "320109990005",
+            jabatan: "Staff IT",
+            no_telepon: "081987654321",
+            gaji_pokok: 4200000,
+            lembur: 350000,
+            total_penghasilan: 4550000,
+            pinjaman: 150000,
+            total_potongan: 150000,
+            gaji_bersih: 4400000
+        }
+    ];
+
+    // Mengambil data dari localStorage jika ada, atau gunakan default
+    function getSlipData() {
+        const stored = localStorage.getItem('demo_slip_gaji_data');
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                return defaultData;
+            }
+        }
+        localStorage.setItem('demo_slip_gaji_data', JSON.stringify(defaultData));
+        return defaultData;
+    }
+
+    function saveSlipData(data) {
+        localStorage.setItem('demo_slip_gaji_data', JSON.stringify(data));
+    }
+
+    function formatRupiah(num) {
+        return 'Rp ' + Number(num).toLocaleString('id-ID');
+    }
+
+    // Render Tabel & Statistik
+    function renderTable(keyword = '') {
+        const data = getSlipData();
+        const tbody = document.getElementById('tbodySlipGaji');
+        tbody.innerHTML = '';
+
+        const filtered = data.filter(item => {
+            const str = `${item.nama_karyawan} ${item.nik} ${item.jabatan} ${item.no_slip}`.toLowerCase();
+            return str.includes(keyword.toLowerCase());
+        });
+
+        // Update Kartu Statistik
+        const totalSlip = data.length;
+        const totalPengeluaran = data.reduce((acc, curr) => acc + curr.gaji_bersih, 0);
+        const rataRataGaji = totalSlip > 0 ? Math.round(totalPengeluaran / totalSlip) : 0;
+
+        document.getElementById('statTotalSlip').innerText = `${totalSlip} Dokumen`;
+        document.getElementById('statTotalPengeluaran').innerText = formatRupiah(totalPengeluaran);
+        document.getElementById('statRataRataGaji').innerText = formatRupiah(rataRataGaji);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="text-center py-5 text-muted">
+                        <div class="mb-2"><i class="bi bi-inbox fs-2 text-secondary"></i></div>
+                        <p class="small mb-2">Belum ada data slip gaji tersimpan.</p>
+                        <a href="tambah.html" class="btn btn-outline-secondary btn-sm">+ Tambah Slip Gaji</a>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        filtered.forEach((item, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center text-muted small">${index + 1}</td>
+                <td><span class="fw-semibold text-dark">${item.no_slip}</span></td>
+                <td class="text-secondary small">${item.periode}</td>
+                <td>
+                    <div class="fw-semibold text-dark">${item.nama_karyawan}</div>
+                    <small class="text-muted">NIK: ${item.nik}</small>
+                </td>
+                <td><span class="small text-secondary">${item.jabatan}</span></td>
+                <td class="text-end text-dark small">${formatRupiah(item.total_penghasilan)}</td>
+                <td class="text-end text-dark small">${formatRupiah(item.total_potongan)}</td>
+                <td class="text-end fw-bold text-dark">${formatRupiah(item.gaji_bersih)}</td>
+                <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <!-- Tombol Detail: HANYA ICON MATA (Tanpa tulisan Detail) -->
+                        <a href="detail.html?id=${item.id}" class="btn btn-outline-secondary" title="Lihat Rincian">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <!-- Tombol Hapus -->
+                        <button type="button" class="btn btn-outline-danger" title="Hapus" onclick="hapusSlip(${item.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Fungsi Hapus Slip Gaji
+    function hapusSlip(id) {
+        if (confirm('Apakah Anda yakin ingin menghapus data slip gaji ini?')) {
+            let data = getSlipData();
+            data = data.filter(item => item.id !== id);
+            saveSlipData(data);
+            renderTable(document.getElementById('searchTable').value);
+        }
+    }
+
+    // Filter Pencarian
+    document.getElementById('searchTable').addEventListener('input', function() {
+        renderTable(this.value);
+    });
+
+    // Inisialisasi awal
+    renderTable();
+</script>
+</body>
+</html>

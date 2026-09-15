@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Slip Gaji - UKK Penggajian (Demo)</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a !important;
+            font-size: 1.1rem;
+        }
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .form-control, .form-select {
+            border-color: #cbd5e1;
+            border-radius: 6px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #334155;
+            box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.15);
+        }
+        .captcha-box {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            user-select: none;
+        }
+        .box-highlight {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+        .btn-dark-custom {
+            background-color: #0f172a;
+            border-color: #0f172a;
+            color: #ffffff;
+        }
+        .btn-dark-custom:hover {
+            background-color: #334155;
+            border-color: #334155;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar (Navbar) -->
+<nav class="navbar navbar-expand-lg navbar-custom py-2 mb-4 sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="riwayat.html">
+            <i class="bi bi-wallet2 text-dark fs-5"></i>
+            <span>UKK PENGGAJIAN</span>
+        </a>
+
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <a href="riwayat.html" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
+                <i class="bi bi-arrow-left"></i>
+                <span>Kembali ke Riwayat</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Konten Utama Form Tambah Slip Gaji -->
+<main class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card p-4">
+                <!-- Header Form Mockup -->
+                <div class="text-center border-bottom pb-3 mb-4">
+                    <h5 class="fw-bold text-dark text-uppercase mb-1">SLIP GAJI KARYAWAN</h5>
+                    <div class="d-inline-flex flex-column align-items-center mt-2">
+                        <label class="small text-secondary fw-semibold mb-1">PERIODE GAJI (DARI - SAMPAI)</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="date" class="form-control form-control-sm text-center" id="periode_mulai" required style="width: 160px;">
+                            <span class="text-muted small fw-semibold">s/d</span>
+                            <input type="date" class="form-control form-control-sm text-center" id="periode_selesai" required style="width: 160px;">
+                        </div>
+                    </div>
+                </div>
+
+                <form id="formTambahSlip" onsubmit="handleSimpan(event)">
+                    <!-- 1. IDENTITAS KARYAWAN -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="nama_karyawan" class="form-label small text-secondary">Nama Karyawan <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nama_karyawan" placeholder="Contoh: Muhammad Ruslan" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="nik" class="form-label small text-secondary">NIK <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nik" placeholder="Contoh: 320109990008" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="jabatan" class="form-label small text-secondary">Jabatan <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="jabatan" placeholder="Contoh: Staff Keuangan" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="no_telepon" class="form-label small text-secondary">No. Telepon / WhatsApp</label>
+                            <input type="text" class="form-control" id="no_telepon" placeholder="Contoh: 08123456789">
+                        </div>
+                    </div>
+
+                    <!-- 2. TABEL PERHITUNGAN: PENGHASILAN & POTONGAN -->
+                    <div class="row g-3 mb-4">
+                        <!-- Kolom Kiri: PENGHASILAN -->
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
+                                    PENGHASILAN
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="gaji_pokok" class="form-label small text-secondary">Gaji Pokok (Rp) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control hitung-gaji" id="gaji_pokok" min="0" step="1000" placeholder="0" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lembur" class="form-label small text-secondary">Lembur (Rp)</label>
+                                        <input type="number" class="form-control hitung-gaji" id="lembur" min="0" step="1000" placeholder="0" value="0">
+                                    </div>
+                                    <hr class="my-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small fw-semibold text-secondary">Total Penghasilan:</span>
+                                        <span class="fw-bold fs-6 text-dark" id="text_total_penghasilan">Rp 0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: POTONGAN -->
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
+                                    RINCIAN POTONGAN
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="pinjaman" class="form-label small text-secondary">Pinjaman Karyawan (Rp)</label>
+                                        <input type="number" class="form-control hitung-gaji" id="pinjaman" min="0" step="1000" placeholder="0" value="0">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-secondary">Potongan Lain</label>
+                                        <input type="text" class="form-control bg-light" value="Rp 0" disabled>
+                                    </div>
+                                    <hr class="my-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small fw-semibold text-secondary">Total Potongan:</span>
+                                        <span class="fw-bold fs-6 text-dark" id="text_total_potongan">Rp 0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. BOX GAJI BERSIH -->
+                    <div class="box-highlight text-center mb-4">
+                        <span class="small text-secondary fw-semibold d-block mb-1">TOTAL GAJI BERSIH DITERIMA</span>
+                        <h3 class="fw-bold text-dark mb-0" id="text_gaji_bersih">Rp 0</h3>
+                    </div>
+
+                    <!-- 4. CAPTCHA PERKALIAN & TOMBOL SIMPAN -->
+                    <div class="row align-items-center justify-content-between g-3">
+                        <div class="col-md-6 d-flex align-items-center gap-3">
+                            <div class="captcha-box text-center" title="Captcha Perkalian Sederhana" style="cursor: pointer;" onclick="generateCaptcha()">
+                                <span id="captchaSoalText">3 × 4 = ?</span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="number" class="form-control text-center fw-semibold" id="captcha_input" placeholder="Hasil perkalian" required autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 text-md-end d-flex gap-2 justify-content-md-end">
+                            <a href="riwayat.html" class="btn btn-outline-secondary px-3">
+                                Batal
+                            </a>
+                            <button type="submit" class="btn btn-dark-custom px-4 d-inline-flex align-items-center gap-1">
+                                <i class="bi bi-check-lg"></i>
+                                <span>Simpan Slip Gaji</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Format Rupiah
+    function formatRupiah(num) {
+        return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+    }
+
+    // Nama Bulan Indonesia
+    const namaBulan = [
+        "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    // Set default tanggal periode (hari ini & 30 hari ke depan)
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 25);
+    const thisMonth = new Date(today.getFullYear(), today.getMonth(), 25);
+
+    function formatDateForInput(d) {
+        return d.toISOString().split('T')[0];
+    }
+
+    document.getElementById('periode_mulai').value = formatDateForInput(lastMonth);
+    document.getElementById('periode_selesai').value = formatDateForInput(thisMonth);
+
+    // Hitung Gaji Realtime
+    function hitungGaji() {
+        const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
+        const lembur = parseFloat(document.getElementById('lembur').value) || 0;
+        const pinjaman = parseFloat(document.getElementById('pinjaman').value) || 0;
+
+        const totalPenghasilan = gajiPokok + lembur;
+        const totalPotongan = pinjaman;
+        const gajiBersih = totalPenghasilan - totalPotongan;
+
+        document.getElementById('text_total_penghasilan').innerText = formatRupiah(totalPenghasilan);
+        document.getElementById('text_total_potongan').innerText = formatRupiah(totalPotongan);
+        document.getElementById('text_gaji_bersih').innerText = formatRupiah(gajiBersih);
+    }
+
+    document.querySelectorAll('.hitung-gaji').forEach(input => {
+        input.addEventListener('input', hitungGaji);
+    });
+
+    // Captcha Perkalian Sederhana
+    let captchaJawaban = 12;
+    function generateCaptcha() {
+        const a = Math.floor(Math.random() * 8) + 2; // 2 - 9
+        const b = Math.floor(Math.random() * 4) + 2; // 2 - 5
+        captchaJawaban = a * b;
+        document.getElementById('captchaSoalText').innerText = `${a} × ${b} = ?`;
+        document.getElementById('captcha_input').value = '';
+    }
+    generateCaptcha();
+
+    // Simpan Slip Gaji
+    function handleSimpan(e) {
+        e.preventDefault();
+
+        const inputCaptcha = parseInt(document.getElementById('captcha_input').value);
+        if (inputCaptcha !== captchaJawaban) {
+            alert('Jawaban perkalian Captcha salah! Silakan hitung ulang.');
+            generateCaptcha();
+            document.getElementById('captcha_input').focus();
+            return;
+        }
+
+        const tglMulai = new Date(document.getElementById('periode_mulai').value);
+        const tglSelesai = new Date(document.getElementById('periode_selesai').value);
+
+        const mulaiStr = `${tglMulai.getDate()} ${namaBulan[tglMulai.getMonth() + 1]} ${tglMulai.getFullYear()}`;
+        const selesaiStr = `${tglSelesai.getDate()} ${namaBulan[tglSelesai.getMonth() + 1]} ${tglSelesai.getFullYear()}`;
+        const periodeFormatted = `${mulaiStr} - ${selesaiStr}`;
+
+        const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
+        const lembur = parseFloat(document.getElementById('lembur').value) || 0;
+        const pinjaman = parseFloat(document.getElementById('pinjaman').value) || 0;
+        const totalPenghasilan = gajiPokok + lembur;
+        const totalPotongan = pinjaman;
+        const gajiBersih = totalPenghasilan - totalPotongan;
+
+        // Ambil data lama
+        let data = [];
+        try {
+            const stored = localStorage.getItem('demo_slip_gaji_data');
+            if (stored) data = JSON.parse(stored);
+        } catch (err) {}
+
+        const nextId = (data.length > 0 ? Math.max(...data.map(d => d.id)) : 0) + 1;
+        const urutan = String(nextId).padStart(3, '0');
+        const noSlip = `SLIP-202609-${urutan}`;
+
+        const newSlip = {
+            id: nextId,
+            no_slip: noSlip,
+            periode: periodeFormatted,
+            tanggal: document.getElementById('periode_selesai').value,
+            nama_karyawan: document.getElementById('nama_karyawan').value,
+            nik: document.getElementById('nik').value,
+            jabatan: document.getElementById('jabatan').value,
+            no_telepon: document.getElementById('no_telepon').value,
+            gaji_pokok: gajiPokok,
+            lembur: lembur,
+            total_penghasilan: totalPenghasilan,
+            pinjaman: pinjaman,
+            total_potongan: totalPotongan,
+            gaji_bersih: gajiBersih
+        };
+
+        data.unshift(newSlip);
+        localStorage.setItem('demo_slip_gaji_data', JSON.stringify(data));
+
+        alert('Slip gaji berhasil dihitung dan disimpan!');
+        window.location.href = 'riwayat.html';
+    }
+</script>
+</body>
+</html>
