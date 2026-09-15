@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Buat Akun Admin Pengujian UKK
+        // bikin akun admin default buat login (admin / admin123)
         User::updateOrCreate(
             ['username' => 'admin'],
             [
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Buat Data Awal Slip Gaji Karyawan
+        // masukin beberapa contoh data slip awal biar ga kosong
         $dummySlip = [
             [
                 'no_slip' => 'SLIP-202609-001',

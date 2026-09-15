@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CekLogin
 {
-    /**
-     * Memeriksa apakah pengguna sudah login sebelum mengakses rute sistem
-     */
+    // middleware buat ngecek user udah login atau belum
     public function handle(Request $request, Closure $next): Response
     {
-        // Jika pengguna belum terotentikasi, alihkan ke halaman login
+        // kalau belum login, tendang balik ke halaman login
         if (! Auth::check()) {
             return redirect()->route('login')
                 ->with('error', 'Silakan masuk (login) terlebih dahulu untuk mengakses sistem.');

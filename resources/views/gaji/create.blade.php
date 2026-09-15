@@ -5,7 +5,7 @@
 @section('content')
 <div class="row justify-content-center mb-5">
     <div class="col-lg-9">
-        <!-- Tombol Navigasi Kembali -->
+        <!-- tombol balik ke riwayat -->
         <div class="mb-3">
             <a href="{{ route('slip-gaji.index') }}" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
                 <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
@@ -13,7 +13,7 @@
         </div>
 
         <div class="card p-4 shadow-sm">
-            <!-- Header Form Mockup Elegan Sesuai Demo -->
+            <!-- judul form dan pilihan periode tanggal -->
             <div class="text-center border-bottom pb-3 mb-4">
                 <h5 class="fw-bold text-dark text-uppercase mb-1">SLIP GAJI KARYAWAN</h5>
                 <div class="d-inline-flex flex-column align-items-center mt-2">
@@ -29,7 +29,7 @@
             <form action="{{ route('slip-gaji.store') }}" method="POST" id="formSlipGaji">
                 @csrf
 
-                <!-- 1. IDENTITAS KARYAWAN -->
+                <!-- bagian input data karyawan -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
                         <label for="nama_karyawan" class="form-label small text-secondary">Nama Karyawan <span class="text-danger">*</span></label>
@@ -52,9 +52,9 @@
                     </div>
                 </div>
 
-                <!-- 2. TABEL PERHITUNGAN: PENGHASILAN & POTONGAN -->
+                <!-- rincian penghasilan sama potongan -->
                 <div class="row g-3 mb-4">
-                    <!-- Kolom Kiri: PENGHASILAN -->
+                    <!-- kolom penghasilan -->
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <!-- Kolom Kanan: POTONGAN -->
+                    <!-- kolom potongan -->
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
@@ -103,13 +103,13 @@
                     </div>
                 </div>
 
-                <!-- 3. BOX GAJI BERSIH MINIMALIS -->
+                <!-- kotak hasil total gaji bersih -->
                 <div class="box-highlight text-center mb-4">
                     <span class="small text-secondary fw-semibold d-block mb-1">Total Gaji Bersih Diterima</span>
                     <h3 class="fw-bold text-dark mb-0" id="text_gaji_bersih">Rp 0</h3>
                 </div>
 
-                <!-- 4. CAPTCHA PERKALIAN & TOMBOL SIMPAN -->
+                <!-- captcha perkalian dan tombol simpan -->
                 <div class="row align-items-center justify-content-between g-3">
                     <div class="col-md-6 d-flex align-items-center gap-3">
                         <div class="captcha-box text-center" title="Captcha Perkalian Sederhana">
@@ -138,18 +138,18 @@
 
 @section('scripts')
 <script>
-    // Format mata uang Rupiah
+    // fungsi buat format angka jadi rupiah
     function formatRupiah(angka) {
         return 'Rp ' + Number(angka || 0).toLocaleString('id-ID');
     }
 
-    // Fungsi menghitung komponen gaji secara realtime
+    // hitung total gaji otomatis pas ngetik angka
     function hitungGaji() {
         const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
         const lembur = parseFloat(document.getElementById('lembur').value) || 0;
         const pinjaman = parseFloat(document.getElementById('pinjaman').value) || 0;
 
-        // Rumus UKK
+        // rumus: bersih = penghasilan - potongan
         const totalPenghasilan = gajiPokok + lembur;
         const totalPotongan = pinjaman;
         const gajiBersih = totalPenghasilan - totalPotongan;
@@ -159,12 +159,12 @@
         document.getElementById('text_gaji_bersih').innerText = formatRupiah(gajiBersih);
     }
 
-    // Event listener input perhitungan realtime
+    // dengerin event ngetik biar langsung update
     document.querySelectorAll('.hitung-gaji').forEach(function(element) {
         element.addEventListener('input', hitungGaji);
     });
 
-    // Inisialisasi awal saat halaman dimuat
+    // jalankan sekali pas halaman pertama kali dibuka
     document.addEventListener('DOMContentLoaded', function() {
         hitungGaji();
     });

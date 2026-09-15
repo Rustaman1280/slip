@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Slip Gaji - UKK Penggajian (Demo)</title>
-    <!-- Google Fonts Inter -->
+    <!-- font inter google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5 CDN -->
+    <!-- css bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons CDN -->
+    <!-- icon bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body {
@@ -72,7 +72,7 @@
 </head>
 <body>
 
-<!-- Top Bar (Navbar) -->
+<!-- navbar atas -->
 <nav class="navbar navbar-expand-lg navbar-custom py-2 mb-4 sticky-top">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="riwayat.html">
@@ -89,12 +89,12 @@
     </div>
 </nav>
 
-<!-- Konten Utama Form Tambah Slip Gaji -->
+<!-- form buat nambah slip gaji baru -->
 <main class="container mb-5">
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <div class="card p-4">
-                <!-- Header Form Mockup -->
+                <!-- bagian atas form slip gaji -->
                 <div class="text-center border-bottom pb-3 mb-4">
                     <h5 class="fw-bold text-dark text-uppercase mb-1">SLIP GAJI KARYAWAN</h5>
                     <div class="d-inline-flex flex-column align-items-center mt-2">
@@ -108,7 +108,7 @@
                 </div>
 
                 <form id="formTambahSlip" onsubmit="handleSimpan(event)">
-                    <!-- 1. IDENTITAS KARYAWAN -->
+                    <!-- 1. form identitas karyawan -->
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label for="nama_karyawan" class="form-label small text-secondary">Nama Karyawan <span class="text-danger">*</span></label>
@@ -131,9 +131,9 @@
                         </div>
                     </div>
 
-                    <!-- 2. TABEL PERHITUNGAN: PENGHASILAN & POTONGAN -->
+                    <!-- 2. kolom penghasilan sama potongan -->
                     <div class="row g-3 mb-4">
-                        <!-- Kolom Kiri: PENGHASILAN -->
+                        <!-- kolom gaji/pemasukan -->
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
@@ -157,7 +157,7 @@
                             </div>
                         </div>
 
-                        <!-- Kolom Kanan: POTONGAN -->
+                        <!-- kolom rincian potongan -->
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light border-bottom py-2 text-center small fw-semibold text-secondary">
@@ -182,13 +182,13 @@
                         </div>
                     </div>
 
-                    <!-- 3. BOX GAJI BERSIH -->
+                    <!-- 3. kotak total gaji bersih -->
                     <div class="box-highlight text-center mb-4">
                         <span class="small text-secondary fw-semibold d-block mb-1">TOTAL GAJI BERSIH DITERIMA</span>
                         <h3 class="fw-bold text-dark mb-0" id="text_gaji_bersih">Rp 0</h3>
                     </div>
 
-                    <!-- 4. CAPTCHA PERKALIAN & TOMBOL SIMPAN -->
+                    <!-- 4. captcha perkalian sama tombol simpan -->
                     <div class="row align-items-center justify-content-between g-3">
                         <div class="col-md-6 d-flex align-items-center gap-3">
                             <div class="captcha-box text-center" title="Captcha Perkalian Sederhana" style="cursor: pointer;" onclick="generateCaptcha()">
@@ -215,22 +215,22 @@
     </div>
 </main>
 
-<!-- Bootstrap 5 JS Bundle -->
+<!-- javascript bootstrap 5 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Format Rupiah
+    // fungsi buat format angka jadi rupiah
     function formatRupiah(num) {
         return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
     }
 
-    // Nama Bulan Indonesia
+    // daftar nama bulan bahasa indonesia
     const namaBulan = [
         "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
     ];
 
-    // Set default tanggal periode (hari ini & 30 hari ke depan)
+    // isi tanggal awal sama akhir otomatis
     const today = new Date();
     const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 25);
     const thisMonth = new Date(today.getFullYear(), today.getMonth(), 25);
@@ -242,7 +242,7 @@
     document.getElementById('periode_mulai').value = formatDateForInput(lastMonth);
     document.getElementById('periode_selesai').value = formatDateForInput(thisMonth);
 
-    // Hitung Gaji Realtime
+    // hitung total penghasilan, potongan, sama gaji bersih otomatis
     function hitungGaji() {
         const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
         const lembur = parseFloat(document.getElementById('lembur').value) || 0;
@@ -261,7 +261,7 @@
         input.addEventListener('input', hitungGaji);
     });
 
-    // Captcha Perkalian Sederhana
+    // bikin soal captcha perkalian angka kecil
     let captchaJawaban = 12;
     function generateCaptcha() {
         const a = Math.floor(Math.random() * 8) + 2; // 2 - 9
@@ -272,7 +272,7 @@
     }
     generateCaptcha();
 
-    // Simpan Slip Gaji
+    // pas tombol simpan diklik, cek captcha trus simpen datanya
     function handleSimpan(e) {
         e.preventDefault();
 
@@ -298,7 +298,7 @@
         const totalPotongan = pinjaman;
         const gajiBersih = totalPenghasilan - totalPotongan;
 
-        // Ambil data lama
+        // ambil data yang udah kesimpen sebelumnya di localstorage
         let data = [];
         try {
             const stored = localStorage.getItem('demo_slip_gaji_data');

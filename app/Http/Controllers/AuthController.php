@@ -11,11 +11,10 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    /**
-     * Menampilkan halaman login sesuai mockup UKK
-     */
+    // buat nampilin halaman login
     public function showLogin(): View|RedirectResponse
     {
+        // kalau udah login langsung lempar ke halaman riwayat
         if (Auth::check()) {
             return redirect()->route('slip-gaji.index');
         }
@@ -23,11 +22,10 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Memproses autentikasi login pengguna
-     */
+    // proses cek login user
     public function login(Request $request): RedirectResponse
     {
+        // cek input username sama password jangan sampai kosong
         $request->validate([
             'username' => 'required',
             'password' => 'required',
@@ -39,13 +37,14 @@ class AuthController extends Controller
         $usernameInput = $request->input('username');
         $password = $request->input('password');
 
-        // Cari pengguna berdasarkan username atau email
+        // cari user di database lewat username atau email
         $user = User::where('username', $usernameInput)
             ->orWhere('email', $usernameInput)
             ->first();
 
-        // Verifikasi kecocokan user dan password hash
+        // cek apakah passwordnya cocok sama yang di hash
         if ($user && Hash::check($password, $user->password)) {
+            // kalau cocok langsung login-in dan buat session baru
             Auth::login($user);
             $request->session()->regenerate();
 
@@ -53,16 +52,16 @@ class AuthController extends Controller
                 ->with('success', 'Selamat datang, '.$user->nama_lengkap.'!');
         }
 
+        // kalau gagal balik lagi sambil bawa pesan error
         return back()
             ->withInput($request->only('username'))
             ->with('error', 'Username atau kata sandi yang Anda masukkan salah.');
     }
 
-    /**
-     * Proses keluar sistem (logout)
-     */
+    // proses logout buat keluar dari akun
     public function logout(Request $request): RedirectResponse
     {
+        // hapus session auth
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

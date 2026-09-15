@@ -6,13 +6,13 @@
 <div class="row justify-content-center align-items-center" style="min-height: 75vh;">
     <div class="col-md-5 col-lg-4">
         <div class="card p-4 p-sm-5 shadow-sm">
-            <!-- Brand Header Minimalis Sesuai Demo -->
+            <!-- judul form login -->
             <div class="text-center mb-4">
                 <h4 class="fw-bold text-dark mb-1 tracking-tight">Masuk</h4>
                 <p class="text-muted small mb-0">Silakan masukkan username dan password</p>
             </div>
 
-            <!-- Info Akun Uji -->
+            <!-- info akun buat ngetes -->
             <div class="alert alert-secondary py-2 px-3 small border-0 mb-4 bg-light text-secondary d-flex align-items-center gap-2">
                 <i class="bi bi-info-circle fs-6"></i>
                 <span>Akun Uji: <strong>admin</strong> / <strong>admin123</strong></span>
@@ -21,7 +21,7 @@
             <form action="{{ route('login.post') }}" method="POST">
                 @csrf
 
-                <!-- Input Username -->
+                <!-- input buat username -->
                 <div class="mb-3">
                     <label for="username" class="form-label small fw-semibold text-secondary">Username</label>
                     <div class="input-group">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <!-- Input Password -->
+                <!-- input buat password -->
                 <div class="mb-4">
                     <label for="password" class="form-label small fw-semibold text-secondary">Kata Sandi</label>
                     <div class="input-group">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <!-- Tombol Masuk -->
+                <!-- tombol login -->
                 <button type="submit" class="btn btn-dark-custom w-100 py-2">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke Sistem
                 </button>
@@ -54,7 +54,7 @@
 
 @section('scripts')
 <script>
-    // Toggle Show/Hide Password
+    // fungsi buat liat atau sembunyiin password pas diklik matanya
     function togglePassword() {
         const passwordInput = document.getElementById('password');
         const toggleIcon = document.getElementById('toggleIcon');

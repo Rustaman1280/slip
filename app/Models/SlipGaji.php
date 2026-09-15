@@ -29,17 +29,13 @@ class SlipGaji extends Model
         'created_at',
     ];
 
-    /**
-     * Helper untuk format mata uang Rupiah
-     */
+    // fungsi pembantu buat ubah angka jadi format rupiah
     public static function rupiah($angka): string
     {
         return 'Rp '.number_format((float) $angka, 0, ',', '.');
     }
 
-    /**
-     * Helper untuk mengonversi angka nominal ke kalimat terbilang bahasa Indonesia
-     */
+    // fungsi buat ubah angka jadi kata-kata terbilang rupiah
     public static function terbilang(float|int $nilai): string
     {
         $angka = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
@@ -75,9 +71,7 @@ class SlipGaji extends Model
         return '';
     }
 
-    /**
-     * Accessor terbilang untuk nominal gaji bersih
-     */
+    // biar bisa langsung dipanggil $slip->terbilang
     public function getTerbilangAttribute(): string
     {
         $hasil = trim((string) preg_replace('/\s+/', ' ', self::terbilang($this->gaji_bersih)));
@@ -85,9 +79,7 @@ class SlipGaji extends Model
         return $hasil ? $hasil.' Rupiah' : '-';
     }
 
-    /**
-     * Accessor untuk URL WhatsApp dengan rincian slip gaji otomatis
-     */
+    // buat bikin link wa otomatis ada isi pesan rincian slipnya
     public function getWaUrlAttribute(): string
     {
         $telepon = preg_replace('/[^0-9]/', '', (string) $this->no_telepon);
@@ -121,9 +113,7 @@ class SlipGaji extends Model
         return 'https://wa.me/'.($telepon ?: '').'?text='.urlencode($pesan);
     }
 
-    /**
-     * Accessor untuk URL Email (mailto) dengan format subjek dan rincian slip gaji
-     */
+    // buat bikin link buka gmail web langsung isi subjek dan pesan
     public function getEmailUrlAttribute(): string
     {
         $subjek = "Slip Gaji - {$this->no_slip} - {$this->nama_karyawan}";

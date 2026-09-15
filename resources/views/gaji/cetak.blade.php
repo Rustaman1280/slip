@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Slip Gaji - {{ $slip->no_slip }}</title>
 
-    <!-- Google Fonts Inter -->
+    <!-- font inter google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 CSS -->
+    <!-- css bootstrap 5 sama icon -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
@@ -44,7 +44,7 @@
             border-radius: 4px;
         }
         
-        /* Gaya khusus saat dicetak / simpan ke PDF */
+        /* styling khusus pas dicetak ke kertas atau save pdf */
         @media print {
             body {
                 background: none;
@@ -64,7 +64,7 @@
 </head>
 <body>
 
-    <!-- Tombol Aksi di Atas (Disembunyikan saat dicetak) -->
+    <!-- tombol aksi di atas, disembunyiin pas dicetak -->
     <div class="container text-center my-3 no-print">
         <div class="d-inline-flex gap-2">
             <button onclick="window.print()" class="btn btn-dark btn-sm">
@@ -79,9 +79,9 @@
         </div>
     </div>
 
-    <!-- Lembar Dokumen Slip Gaji Format Resmi Bersih & Netral -->
+    <!-- tampilan lembar slip gaji nya -->
     <div class="slip-container">
-        <!-- Header Dokumen Slip Gaji (Tanpa PT Sesuai Permintaan) -->
+        <!-- judul slip gaji nya -->
         <div class="slip-header text-center">
             <h4 class="fw-bold text-uppercase mb-1">SLIP GAJI KARYAWAN</h4>
             <p class="mb-0 small text-secondary">
@@ -89,7 +89,7 @@
             </p>
         </div>
 
-        <!-- Identitas Karyawan -->
+        <!-- info identitas karyawan -->
         <table class="table table-borderless table-sm mb-4">
             <tr>
                 <td style="width: 18%;" class="fw-semibold text-secondary">Nama Karyawan</td>
@@ -118,9 +118,9 @@
             @endif
         </table>
 
-        <!-- Tabel Rincian Penghasilan & Potongan -->
+        <!-- tabel rincian gaji sama potongannya -->
         <div class="row g-3 mb-4">
-            <!-- Kolom Penghasilan -->
+            <!-- bagian pemasukan/gaji -->
             <div class="col-6">
                 <table class="table table-bordered table-sm table-rincian mb-0">
                     <thead>
@@ -145,7 +145,7 @@
                 </table>
             </div>
 
-            <!-- Kolom Potongan -->
+            <!-- bagian potongan -->
             <div class="col-6">
                 <table class="table table-bordered table-sm table-rincian mb-0">
                     <thead>
@@ -171,7 +171,7 @@
             </div>
         </div>
 
-        <!-- Box Total Gaji Bersih -->
+        <!-- kotak total gaji bersih yang didapet -->
         <div class="total-box text-center mb-4">
             <div class="small fw-semibold text-secondary text-uppercase">Gaji Bersih Diterima (Total Penghasilan - Total Potongan)</div>
             <h4 class="fw-bold text-dark mb-1 mt-1">
@@ -186,7 +186,7 @@
         </div>
         @endif
 
-        <!-- Tanda Tangan Penerima (Tanpa Bendahara Sesuai Permintaan) -->
+        <!-- tanda tangan yang nerima gaji -->
         <div class="row mt-5 pt-3">
             <div class="col-12 text-end">
                 <div class="d-inline-block text-center pe-4" style="min-width: 180px;">
@@ -198,7 +198,7 @@
         </div>
     </div>
 
-    <!-- Script Cetak Otomatis saat Halaman Dibuka -->
+    <!-- script biar pas kebuka halamannya langsung otomatis manggil print browser -->
     <script>
         window.addEventListener('load', function() {
             setTimeout(function() {

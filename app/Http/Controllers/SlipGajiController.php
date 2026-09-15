@@ -10,14 +10,13 @@ use Illuminate\View\View;
 
 class SlipGajiController extends Controller
 {
-    /**
-     * Halaman Utama: Menampilkan Riwayat Slip Gaji Karyawan beserta ringkasan statistik
-     */
+    // buat nampilin halaman daftar riwayat slip gaji
     public function index(): View
     {
+        // ambil semua data slip dari yang paling baru
         $daftarSlip = SlipGaji::orderBy('id', 'desc')->get();
 
-        // Ringkasan statistik untuk kartu dashboard
+        // hitung total buat ditampilin di kartu atas
         $totalSlip = $daftarSlip->count();
         $totalPengeluaran = $daftarSlip->sum('gaji_bersih');
         $rataRataGaji = $totalSlip > 0 ? ($totalPengeluaran / $totalSlip) : 0;
@@ -25,33 +24,25 @@ class SlipGajiController extends Controller
         return view('gaji.index', compact('daftarSlip', 'totalSlip', 'totalPengeluaran', 'rataRataGaji'));
     }
 
-    /**
-     * Halaman Tambah: Menampilkan form input slip gaji dengan captcha perkalian sederhana
-     */
+    // buat buka form tambah slip gaji baru
     public function create(): View
     {
-        // Buat soal captcha perkalian mudah (angka 2 s/d 9 dikali 2 s/d 5)
+        // bikin soal perkalian gampang buat captcha
         $angka1 = rand(2, 9);
         $angka2 = rand(2, 5);
         $captchaSoal = "{$angka1} × {$angka2}";
         $captchaJawaban = $angka1 * $angka2;
 
+        // simpan jawaban yang bener di session
         session(['captcha_jawaban' => $captchaJawaban]);
 
         return view('gaji.create', compact('captchaSoal'));
     }
 
-    /**
-     * Memproses perhitungan gaji dan menyimpan ke database
-     *
-     * Rumus sesuai soal UKK:
-     * a. Total penghasilan = Gaji Pokok + Lembur
-     * b. Total Potongan = Pinjaman Karyawan
-     * c. Gaji Bersih = Total penghasilan - Total Potongan
-     */
+    // proses hitung dan simpan data slip gaji
     public function store(Request $request): RedirectResponse
     {
-        // 1. Validasi input
+        // cek dulu inputan formnya udah bener atau belum
         $request->validate([
             'nik' => 'required|string|max:30',
             'nama_karyawan' => 'required|string|max:100',
@@ -73,14 +64,14 @@ class SlipGajiController extends Controller
             'captcha.numeric' => 'Jawaban captcha harus berupa angka.',
         ]);
 
-        // 2. Verifikasi Captcha Perkalian Sederhana
+        // cocokin jawaban captcha yang diinput sama yang di session
         if ((int) $request->input('captcha') !== (int) session('captcha_jawaban')) {
             return back()
                 ->withInput()
                 ->with('error', 'Jawaban perkalian Captcha salah! Silakan coba lagi.');
         }
 
-        // 3. Format Periode dari kalender Dari s/d Sampai
+        // ubah format tanggal kalender jadi teks indonesia
         if ($request->filled('periode_mulai') && $request->filled('periode_selesai')) {
             $namaBulan = [
                 1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
@@ -101,23 +92,23 @@ class SlipGajiController extends Controller
             $tanggal = date('Y-m-d');
         }
 
-        // 4. Ambil nilai angka (default 0 bila kosong)
+        // ambil nominal uangnya, kalau kosong set 0
         $gajiPokok = (float) $request->input('gaji_pokok', 0);
         $lembur = (float) $request->input('lembur', 0);
         $pinjaman = (float) $request->input('pinjaman', 0);
 
-        // 5. Perhitungan gaji sesuai ketentuan Soal UKK
+        // rumus gaji bersih: (pokok + lembur) - pinjaman
         $totalPenghasilan = $gajiPokok + $lembur;
         $totalPotongan = $pinjaman;
         $gajiBersih = $totalPenghasilan - $totalPotongan;
 
-        // 6. Generate Nomor Slip Otomatis: SLIP-YYYYMM-00X
+        // generate nomor slip otomatis contoh: SLIP-202609-001
         $tahunBulan = date('Ym');
         $jumlahDataBulanIni = SlipGaji::where('no_slip', 'LIKE', "SLIP-{$tahunBulan}-%")->count();
         $urutan = str_pad($jumlahDataBulanIni + 1, 3, '0', STR_PAD_LEFT);
         $noSlip = "SLIP-{$tahunBulan}-{$urutan}";
 
-        // 7. Simpan ke database
+        // simpan ke tabel slip_gaji
         $slip = SlipGaji::create([
             'no_slip' => $noSlip,
             'tanggal' => $tanggal,
@@ -141,9 +132,7 @@ class SlipGajiController extends Controller
             ->with('success', "Slip Gaji {$slip->no_slip} untuk {$slip->nama_karyawan} berhasil dihitung dan ditambahkan!");
     }
 
-    /**
-     * Menampilkan detail rincian resmi slip gaji (lengkap dengan tombol WhatsApp, Email, dan Cetak PDF)
-     */
+    // buat liat halaman rincian detail slip gaji
     public function show(int $id): View
     {
         $slip = SlipGaji::findOrFail($id);
@@ -151,9 +140,7 @@ class SlipGajiController extends Controller
         return view('gaji.show', compact('slip'));
     }
 
-    /**
-     * Tampilan cetak resmi slip gaji (siap diprint ke printer atau PDF)
-     */
+    // buat nampilin halaman khusus print cetak slip
     public function cetak(int $id): View
     {
         $slip = SlipGaji::findOrFail($id);
@@ -161,9 +148,7 @@ class SlipGajiController extends Controller
         return view('gaji.cetak', compact('slip'));
     }
 
-    /**
-     * Menghapus data slip gaji
-     */
+    // buat hapus data slip gaji
     public function destroy(int $id): RedirectResponse
     {
         $slip = SlipGaji::findOrFail($id);

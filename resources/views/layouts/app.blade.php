@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sistem Penggajian Karyawan')</title>
 
-    <!-- Google Font: Inter -->
+    <!-- font inter google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 CSS -->
+    <!-- css bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    <!-- icon bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
@@ -101,7 +101,7 @@
             padding: 1.25rem;
         }
 
-        /* Styling Cetak / Print Bersih */
+        /* styling khusus buat print biar rapi */
         @media print {
             body {
                 background: white !important;
@@ -130,7 +130,7 @@
 </head>
 <body>
 
-    <!-- Navigasi Bar Minimalis & Konsisten (Hanya tampil jika bukan halaman login) -->
+    <!-- navbar atas, disembunyiin kalo di halaman login -->
     @if (!request()->routeIs('login'))
     <nav class="navbar navbar-expand-lg navbar-custom py-2 mb-4 sticky-top no-print">
         <div class="container">
@@ -161,9 +161,9 @@
     </nav>
     @endif
 
-    <!-- Konten Utama -->
+    <!-- ini tempat konten utamanya -->
     <main class="container my-4 flex-grow-1">
-        <!-- Notifikasi Pesan Sukses -->
+        <!-- alert kalo berhasil -->
         @if (session('success'))
             <div class="alert alert-light border border-secondary-subtle alert-dismissible fade show d-flex align-items-center rounded-2 py-2 px-3 mb-4" role="alert">
                 <i class="bi bi-check-circle text-dark fs-6 me-2"></i>
@@ -172,7 +172,7 @@
             </div>
         @endif
 
-        <!-- Notifikasi Pesan Error -->
+        <!-- alert kalo ada yang salah/error -->
         @if (session('error'))
             <div class="alert alert-light border border-danger-subtle alert-dismissible fade show d-flex align-items-center rounded-2 py-2 px-3 mb-4" role="alert">
                 <i class="bi bi-exclamation-circle text-danger fs-6 me-2"></i>
@@ -181,7 +181,7 @@
             </div>
         @endif
 
-        <!-- Notifikasi Error Validasi Input -->
+        <!-- alert kalo inputan form ada yang kurang/salah -->
         @if ($errors->any())
             <div class="alert alert-light border border-danger-subtle alert-dismissible fade show rounded-2 py-2 px-3 mb-4" role="alert">
                 <div class="small text-danger fw-semibold mb-1"><i class="bi bi-x-circle me-1"></i> Periksa kembali data input Anda:</div>
@@ -198,7 +198,7 @@
     </main>
 
 
-    <!-- Bootstrap 5 JS Bundle -->
+    <!-- javascript bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
 </body>

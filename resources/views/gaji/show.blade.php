@@ -5,33 +5,33 @@
 @section('content')
 <div class="row justify-content-center mb-5">
     <div class="col-lg-8">
-        <!-- Tombol Navigasi & 3 Aksi Utama (WhatsApp, Gmail, Cetak) Sesuai Demo -->
+        <!-- tombol navigasi balik dan 3 tombol aksi -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2 no-print">
             <a href="{{ route('slip-gaji.index') }}" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
                 <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
             </a>
 
             <div class="d-flex flex-wrap gap-2">
-                <!-- 1. Tombol Kirim WhatsApp -->
+                <!-- tombol kirim ke wa -->
                 <a href="{{ $slip->wa_url }}" target="_blank" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
                     <i class="bi bi-whatsapp"></i> WhatsApp
                 </a>
 
-                <!-- 2. Tombol Kirim Email via Gmail Langsung -->
+                <!-- tombol kirim ke gmail web -->
                 <a href="{{ $slip->email_url }}" target="_blank" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1">
                     <i class="bi bi-envelope"></i> Gmail
                 </a>
 
-                <!-- 3. Tombol Cetak / PDF -->
+                <!-- tombol print slip atau simpan pdf -->
                 <button type="button" onclick="window.print()" class="btn btn-dark-custom btn-sm d-inline-flex align-items-center gap-1">
                     <i class="bi bi-printer"></i> Cetak / Simpan PDF
                 </button>
             </div>
         </div>
 
-        <!-- Kartu Rincian Slip Gaji Resmi & Bersih Sesuai Demo -->
+        <!-- kartu rincian slip gaji -->
         <div class="card p-4">
-            <!-- Header Slip Gaji (Tanpa PT Sesuai Permintaan) -->
+            <!-- judul slip gaji -->
             <div class="text-center border-bottom pb-3 mb-3">
                 <h5 class="fw-bold text-dark text-uppercase mb-1">SLIP GAJI KARYAWAN</h5>
                 <p class="text-secondary small mb-0">
@@ -39,7 +39,7 @@
                 </p>
             </div>
 
-            <!-- Identitas Penerima -->
+            <!-- data diri karyawan -->
             <div class="row g-2 mb-4 p-3 bg-light rounded-2">
                 <div class="col-sm-6">
                     <div class="small text-secondary">Nama Karyawan</div>
@@ -71,9 +71,9 @@
                 @endif
             </div>
 
-            <!-- Rincian Komponen Gaji: Penghasilan & Potongan -->
+            <!-- rincian penghasilan sama potongan -->
             <div class="row g-3 mb-4">
-                <!-- Kolom Penghasilan -->
+                <!-- kolom penghasilan -->
                 <div class="col-sm-6">
                     <div class="card border-0 bg-light p-3 h-100">
                         <span class="small fw-semibold text-secondary text-uppercase d-block mb-2">Penghasilan (A)</span>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <!-- Kolom Potongan -->
+                <!-- kolom potongan -->
                 <div class="col-sm-6">
                     <div class="card border-0 bg-light p-3 h-100">
                         <span class="small fw-semibold text-secondary text-uppercase d-block mb-2">Potongan (B)</span>
@@ -114,14 +114,14 @@
                 </div>
             </div>
 
-            <!-- Total Gaji Bersih Diterima -->
+            <!-- total gaji bersih dan terbilang -->
             <div class="box-highlight text-center mb-4">
                 <span class="small text-secondary fw-semibold d-block mb-1">TOTAL GAJI BERSIH DITERIMA (A - B)</span>
                 <h3 class="fw-bold text-dark mb-1">{{ \App\Models\SlipGaji::rupiah($slip->gaji_bersih) }}</h3>
                 <div class="small text-muted fst-italic">Terbilang: {{ $slip->terbilang }}</div>
             </div>
 
-            <!-- Tanda Tangan: HANYA PENERIMA DI SEBELAH KANAN (Tanpa Bendahara Sesuai Permintaan) -->
+            <!-- tanda tangan penerima di sebelah kanan -->
             <div class="row pt-4 mt-2">
                 <div class="col-6"></div>
                 <div class="col-6 text-center">

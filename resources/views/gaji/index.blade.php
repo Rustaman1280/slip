@@ -3,14 +3,14 @@
 @section('title', 'Riwayat Slip Gaji Karyawan')
 
 @section('content')
-<!-- Header Halaman Riwayat & Tombol Tambah Slip Gaji -->
+<!-- judul halaman dan tombol buat nambah slip baru -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
     <div>
         <h5 class="fw-bold text-dark mb-1">Riwayat Slip Gaji Karyawan</h5>
         <p class="text-muted small mb-0">Daftar arsip slip gaji karyawan yang telah dibuat dan dihitung.</p>
     </div>
     <div>
-        <!-- Tombol Tambah Slip Gaji Minimalis -->
+        <!-- tombol buat ke form tambah slip -->
         <a href="{{ route('slip-gaji.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2">
             <i class="bi bi-plus-lg fs-6"></i>
             <span>Tambah Slip Gaji</span>
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<!-- 3 Kartu Ringkasan (Stats Cards) Minimalis -->
+<!-- 3 kartu ringkasan total dan rata-rata -->
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card p-3">
@@ -61,11 +61,11 @@
     </div>
 </div>
 
-<!-- Tabel Riwayat Slip Gaji Minimalis & Rapi -->
+<!-- tabel daftar riwayat slip gaji -->
 <div class="card">
     <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
         <span class="fw-semibold text-dark small">Daftar Arsip Slip Gaji</span>
-        <!-- Input Pencarian Sederhana -->
+        <!-- input pencarian nama atau nik -->
         <div class="input-group input-group-sm" style="max-width: 240px;">
             <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-search"></i></span>
             <input type="text" class="form-control border-start-0" id="searchTable" placeholder="Cari nama atau NIK...">
@@ -110,12 +110,12 @@
                             <td class="text-end fw-bold text-dark">{{ \App\Models\SlipGaji::rupiah($item->gaji_bersih) }}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <!-- Tombol Detail (Icon mata, di dalamnya terdapat WhatsApp, Email, dan Cetak PDF) -->
+                                    <!-- tombol buat liat detail rincian -->
                                     <a href="{{ route('slip-gaji.show', $item->id) }}" class="btn btn-outline-secondary" title="Lihat Rincian">
                                         <i class="bi bi-eye"></i>
                                     </a>
 
-                                    <!-- Tombol Hapus -->
+                                    <!-- tombol hapus slip -->
                                     <form action="{{ route('slip-gaji.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus slip gaji ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -148,7 +148,7 @@
 
 @section('scripts')
 <script>
-    // Filter pencarian tabel sederhana
+    // filter pencarian biar tabelnya bisa disaring langsung
     document.getElementById('searchTable')?.addEventListener('keyup', function() {
         const keyword = this.value.toLowerCase();
         const rows = document.querySelectorAll('#tableSlipGaji tbody tr');
