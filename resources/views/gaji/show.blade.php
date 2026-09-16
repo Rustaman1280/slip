@@ -22,6 +22,11 @@
                     <i class="bi bi-envelope"></i> Gmail
                 </a>
 
+                <!-- tombol edit slip -->
+                <a href="{{ route('slip-gaji.edit', $slip->id) }}" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-pencil"></i> Edit Slip
+                </a>
+
                 <!-- tombol print slip atau simpan pdf -->
                 <button type="button" onclick="window.print()" class="btn btn-dark-custom btn-sm d-inline-flex align-items-center gap-1">
                     <i class="bi bi-printer"></i> Cetak / Simpan PDF

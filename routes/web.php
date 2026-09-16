@@ -26,6 +26,8 @@ Route::middleware(['cek.login'])->group(function () {
     Route::get('/slip-gaji/tambah', [SlipGajiController::class, 'create'])->name('slip-gaji.create');
     Route::post('/slip-gaji', [SlipGajiController::class, 'store'])->name('slip-gaji.store');
     Route::get('/slip-gaji/{id}', [SlipGajiController::class, 'show'])->name('slip-gaji.show');
+    Route::get('/slip-gaji/{id}/edit', [SlipGajiController::class, 'edit'])->name('slip-gaji.edit');
+    Route::put('/slip-gaji/{id}', [SlipGajiController::class, 'update'])->name('slip-gaji.update');
     Route::get('/slip-gaji/{id}/cetak', [SlipGajiController::class, 'cetak'])->name('slip-gaji.cetak');
     Route::delete('/slip-gaji/{id}', [SlipGajiController::class, 'destroy'])->name('slip-gaji.destroy');
 });

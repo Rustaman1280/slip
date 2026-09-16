@@ -170,4 +170,93 @@ class SlipGajiTest extends TestCase
             $response->assertSee($slip->nama_karyawan);
         }
     }
+
+    // tes buka halaman edit slip gaji setelah login
+    public function test_slip_gaji_edit_page_can_be_rendered_when_authenticated(): void
+    {
+        $admin = User::first();
+        $this->actingAs($admin);
+
+        $slip = SlipGaji::first();
+        if (! $slip) {
+            $slip = SlipGaji::create([
+                'no_slip' => 'SLIP-TEST-001',
+                'tanggal' => date('Y-m-d'),
+                'periode' => '25 November 2025 - 25 Desember 2025',
+                'nik' => 'TEST-EDIT-01',
+                'nama_karyawan' => 'Testing Edit User',
+                'jabatan' => 'Staff IT',
+                'gaji_pokok' => 4000000,
+                'lembur' => 500000,
+                'total_penghasilan' => 4500000,
+                'pinjaman' => 200000,
+                'total_potongan' => 200000,
+                'gaji_bersih' => 4300000,
+                'created_by' => $admin->id,
+            ]);
+        }
+
+        $response = $this->get(route('slip-gaji.edit', $slip->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('EDIT SLIP GAJI KARYAWAN');
+        $response->assertSee($slip->no_slip);
+        $response->assertSee($slip->nama_karyawan);
+        $response->assertSee('Simpan Perubahan');
+    }
+
+    // tes proses update data slip gaji
+    public function test_slip_gaji_can_be_updated(): void
+    {
+        $admin = User::first();
+        $this->actingAs($admin);
+
+        $slip = SlipGaji::create([
+            'no_slip' => 'SLIP-TEST-UPDATE',
+            'tanggal' => '2026-01-25',
+            'periode' => '01 Januari 2026 - 25 Januari 2026',
+            'nik' => 'TEST-UPDATE-01',
+            'nama_karyawan' => 'Karyawan Lama',
+            'jabatan' => 'Junior Staff',
+            'gaji_pokok' => 3000000,
+            'lembur' => 0,
+            'total_penghasilan' => 3000000,
+            'pinjaman' => 0,
+            'total_potongan' => 0,
+            'gaji_bersih' => 3000000,
+            'created_by' => $admin->id,
+        ]);
+
+        $response = $this->put(route('slip-gaji.update', $slip->id), [
+            'nik' => 'TEST-UPDATE-01-NEW',
+            'nama_karyawan' => 'Karyawan Diperbarui',
+            'jabatan' => 'Senior Developer',
+            'periode_mulai' => '2026-01-01',
+            'periode_selesai' => '2026-01-31',
+            'no_telepon' => '081299998888',
+            'gaji_pokok' => 6000000,
+            'lembur' => 1500000,
+            'pinjaman' => 500000,
+            'keterangan' => 'Gaji lembur proyek selesai',
+        ]);
+
+        $response->assertRedirect(route('slip-gaji.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('slip_gaji', [
+            'id' => $slip->id,
+            'nik' => 'TEST-UPDATE-01-NEW',
+            'nama_karyawan' => 'Karyawan Diperbarui',
+            'jabatan' => 'Senior Developer',
+            'gaji_pokok' => 6000000,
+            'lembur' => 1500000,
+            'total_penghasilan' => 7500000,
+            'pinjaman' => 500000,
+            'total_potongan' => 500000,
+            'gaji_bersih' => 7000000,
+            'keterangan' => 'Gaji lembur proyek selesai',
+        ]);
+
+        $slip->delete();
+    }
 }

@@ -140,6 +140,116 @@ class SlipGajiController extends Controller
         return view('gaji.show', compact('slip'));
     }
 
+    // buat buka form edit slip gaji
+    public function edit(int $id): View
+    {
+        $slip = SlipGaji::findOrFail($id);
+
+        $periodeMulai = '';
+        $periodeSelesai = $slip->tanggal ? date('Y-m-d', strtotime($slip->tanggal)) : date('Y-m-d');
+
+        if ($slip->periode && str_contains($slip->periode, ' - ')) {
+            $parts = explode(' - ', $slip->periode);
+            if (count($parts) === 2) {
+                $namaBulanMap = [
+                    'Januari' => 'January', 'Februari' => 'February', 'Maret' => 'March',
+                    'April' => 'April', 'Mei' => 'May', 'Juni' => 'June',
+                    'Juli' => 'July', 'Agustus' => 'August', 'September' => 'September',
+                    'Oktober' => 'October', 'November' => 'November', 'Desember' => 'December',
+                ];
+                $mulaiEn = strtr(trim($parts[0]), $namaBulanMap);
+                $selesaiEn = strtr(trim($parts[1]), $namaBulanMap);
+                $timeMulai = strtotime($mulaiEn);
+                $timeSelesai = strtotime($selesaiEn);
+                if ($timeMulai) {
+                    $periodeMulai = date('Y-m-d', $timeMulai);
+                }
+                if ($timeSelesai) {
+                    $periodeSelesai = date('Y-m-d', $timeSelesai);
+                }
+            }
+        }
+
+        if (! $periodeMulai) {
+            $periodeMulai = date('Y-m-d', strtotime('-1 month', strtotime($periodeSelesai)));
+        }
+
+        return view('gaji.edit', compact('slip', 'periodeMulai', 'periodeSelesai'));
+    }
+
+    // proses update perubahan data slip gaji
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $slip = SlipGaji::findOrFail($id);
+
+        $request->validate([
+            'nik' => 'required|string|max:30',
+            'nama_karyawan' => 'required|string|max:100',
+            'jabatan' => 'required|string|max:50',
+            'periode_mulai' => 'nullable|date',
+            'periode_selesai' => 'nullable|date',
+            'periode' => 'nullable|string|max:100',
+            'no_telepon' => 'nullable|string|max:20',
+            'gaji_pokok' => 'required|numeric|min:0',
+            'lembur' => 'nullable|numeric|min:0',
+            'pinjaman' => 'nullable|numeric|min:0',
+            'keterangan' => 'nullable|string',
+        ], [
+            'nik.required' => 'NIK karyawan wajib diisi.',
+            'nama_karyawan.required' => 'Nama karyawan wajib diisi.',
+            'jabatan.required' => 'Jabatan wajib diisi.',
+            'gaji_pokok.required' => 'Gaji pokok wajib diisi.',
+            'gaji_pokok.numeric' => 'Gaji pokok harus berupa angka.',
+        ]);
+
+        if ($request->filled('periode_mulai') && $request->filled('periode_selesai')) {
+            $namaBulan = [
+                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+            ];
+
+            $tglMulai = strtotime($request->input('periode_mulai'));
+            $tglSelesai = strtotime($request->input('periode_selesai'));
+
+            $mulaiStr = date('j', $tglMulai).' '.$namaBulan[(int) date('n', $tglMulai)].' '.date('Y', $tglMulai);
+            $selesaiStr = date('j', $tglSelesai).' '.$namaBulan[(int) date('n', $tglSelesai)].' '.date('Y', $tglSelesai);
+
+            $periode = "{$mulaiStr} - {$selesaiStr}";
+            $tanggal = $request->input('periode_selesai');
+        } else {
+            $periode = $request->input('periode', $slip->periode ?: date('d F Y'));
+            $tanggal = $slip->tanggal ?: date('Y-m-d');
+        }
+
+        $gajiPokok = (float) $request->input('gaji_pokok', 0);
+        $lembur = (float) $request->input('lembur', 0);
+        $pinjaman = (float) $request->input('pinjaman', 0);
+
+        $totalPenghasilan = $gajiPokok + $lembur;
+        $totalPotongan = $pinjaman;
+        $gajiBersih = $totalPenghasilan - $totalPotongan;
+
+        $slip->update([
+            'tanggal' => $tanggal,
+            'periode' => $periode,
+            'nik' => $request->input('nik'),
+            'nama_karyawan' => $request->input('nama_karyawan'),
+            'jabatan' => $request->input('jabatan'),
+            'no_telepon' => $request->input('no_telepon'),
+            'gaji_pokok' => $gajiPokok,
+            'lembur' => $lembur,
+            'total_penghasilan' => $totalPenghasilan,
+            'pinjaman' => $pinjaman,
+            'total_potongan' => $totalPotongan,
+            'gaji_bersih' => $gajiBersih,
+            'keterangan' => $request->input('keterangan'),
+        ]);
+
+        return redirect()->route('slip-gaji.index')
+            ->with('success', "Slip Gaji {$slip->no_slip} untuk {$slip->nama_karyawan} berhasil diperbarui!");
+    }
+
     // buat nampilin halaman khusus print cetak slip
     public function cetak(int $id): View
     {

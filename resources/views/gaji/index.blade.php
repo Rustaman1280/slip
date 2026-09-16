@@ -85,7 +85,7 @@
                         <th class="text-end">Penghasilan</th>
                         <th class="text-end">Potongan</th>
                         <th class="text-end">Gaji Bersih</th>
-                        <th class="text-center" style="width: 100px;">Aksi</th>
+                        <th class="text-center" style="width: 120px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,6 +113,11 @@
                                     <!-- tombol buat liat detail rincian -->
                                     <a href="{{ route('slip-gaji.show', $item->id) }}" class="btn btn-outline-secondary" title="Lihat Rincian">
                                         <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <!-- tombol buat edit slip -->
+                                    <a href="{{ route('slip-gaji.edit', $item->id) }}" class="btn btn-outline-primary" title="Edit Slip Gaji">
+                                        <i class="bi bi-pencil"></i>
                                     </a>
 
                                     <!-- tombol hapus slip -->
