@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: slip-gaji
+    runtime: docker
+    plan: free
+    region: singapore
+    envVars:
+      - key: APP_NAME
+        value: Aplikasi Slip Gaji
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: RUN_MIGRATIONS
+        value: "true"
+      - key: RUN_SEEDER
+        value: "true"
+      # Konfigurasi Database (Sesuaikan dengan Database yang Anda pakai di Render)
+      # Jika menggunakan PostgreSQL Render:
+      # - key: DB_CONNECTION
+      #   value: pgsql
+      # - key: DB_HOST
+      #   fromDatabase:
+      #     name: database-anda
+      #     property: host

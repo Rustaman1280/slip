@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slip_gaji_app
+    restart: unless-stopped
+    ports:
+      - "8080:10000"
+    environment:
+      APP_NAME: "Slip Gaji"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: base64:Jh0A8R5CzsHxy3NaY/StMP4Yl192QZmH/t20NjjS0Gs=
+      APP_URL: "http://localhost:8080"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ukkrus
+      DB_USERNAME: root
+      DB_PASSWORD: rootpassword
+      RUN_MIGRATIONS: "true"
+      RUN_SEEDER: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: slip_gaji_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ukkrus
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  dbdata:
